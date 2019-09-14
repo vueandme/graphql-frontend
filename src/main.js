@@ -1,9 +1,12 @@
 import Vue from 'vue'
 import VueApollo from 'vue-apollo'
+import VueRouter from 'vue-router'
 import ApolloClient from 'apollo-boost'
-import App from './App.vue'
 import '@/assets/tailwind.css'
+import App from './App.vue'
+import router from './router'
 
+Vue.use(VueRouter)
 Vue.use(VueApollo)
 
 const defaultClient = new ApolloClient({
@@ -18,5 +21,6 @@ Vue.config.productionTip = false
 
 new Vue({
   render: h => h(App),
-  apolloProvider
+  apolloProvider,
+  router
 }).$mount('#app')
