@@ -9,6 +9,7 @@ const routes = [
   },
   {
     path: '/wine/:id',
+    name: 'wine',
     component: Wine
   }
 ]
