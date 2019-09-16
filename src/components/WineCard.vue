@@ -17,10 +17,6 @@
           <i class="far fa-calendar-alt"></i>
           {{ wine.year }}
         </span>
-        <span class="pr-3">
-          <i class="fas fa-map-marker-alt"></i>
-          {{ wine.province }}
-        </span>
       </div>
     </router-link>
   </div>

@@ -32,7 +32,7 @@
         </button>
         <button
           type="button"
-          class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
+          class="modal-close px-4 bg-secondary p-3 rounded-lg text-white"
           @click="$emit('cancel', $event)"
         >
           Close

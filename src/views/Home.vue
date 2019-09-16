@@ -32,6 +32,7 @@ export default {
   },
   data() {
     return {
+      // This array should be populated with data fetched from the API
       allWines: [],
       modalOpen: false
     }
@@ -41,12 +42,16 @@ export default {
       if (e.type === 'click' || e.keyCode === 27) this.modalOpen = false
     },
     addNewWine(wine) {
+      // The mutation logic for adding new wine should be written here
       console.log(wine)
       this.closeModal()
     }
   },
   mounted() {
     document.addEventListener('keyup', this.closeModal)
+  },
+  beforeDestroy() {
+    document.removeEventListener('keyup', this.closeModal)
   }
 }
 </script>
