@@ -1,0 +1,11 @@
+query GetWine($id: ID!) {
+  getWine(id: $id) {
+    id
+    title
+    description
+    variety
+    winery
+    province
+    year
+  }
+}

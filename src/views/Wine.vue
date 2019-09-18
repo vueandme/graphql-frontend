@@ -3,10 +3,16 @@
     <img src="../assets/wine.png" alt="Wine" class="wine-placeholder m-6" />
     <div class="flex flex-col justify-between w-full my-5">
       <h2 class="text-black font-bold text-xl mb-2 text-center">
-        Hello, I am wine with id {{ $route.params.id }}
+        {{ wine.title }}
       </h2>
-      <p class="text-grey-darker text-base">
-        Let's fetch more details about me!
+      <h3 class="font-bold text-lg mb-2 text-center">
+        {{ wine.year }}
+      </h3>
+      <p class="mb-2">Province: {{ wine.province }}</p>
+      <p class="mb-2">Winery: {{ wine.winery }}</p>
+      <p class="mb-2">Variety: {{ wine.variety }}</p>
+      <p class="mb-3 text-grey-darker text-base">
+        {{ wine.description }}
       </p>
       <button
         type="button"
@@ -17,6 +23,30 @@
     </div>
   </div>
 </template>
+
+<script>
+import getWineQuery from '../graphql/getWine.query.gql'
+export default {
+  data() {
+    return {
+      wine: {}
+    }
+  },
+  apollo: {
+    wine: {
+      query: getWineQuery,
+      variables() {
+        return {
+          id: this.$route.params.id
+        }
+      },
+      update(data) {
+        return data.getWine
+      }
+    }
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .wine-placeholder {

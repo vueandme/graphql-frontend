@@ -33,7 +33,6 @@ export default {
   },
   data() {
     return {
-      // This array should be populated with data fetched from the API
       wines: [],
       modalOpen: false
     }
