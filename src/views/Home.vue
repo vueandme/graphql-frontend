@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h1 class="mt-4 text-black font-bold text-xl mb-2">
-      Here should be some wines...
-    </h1>
-    <div v-if="allWines.length" class="flex flex-wrap">
-      <WineCard v-for="wine in allWines" :key="wine.id" :wine="wine" />
+    <h2 class="text-xl text-bold m-3" v-if="$apollo.queries.wines.loading">
+      Loading...
+    </h2>
+    <div v-else-if="wines.length" class="flex flex-wrap">
+      <WineCard v-for="wine in wines" :key="wine.id" :wine="wine" />
       <button
         class="modal-open bg-transparent border border-gray-500 hover:border-main text-gray-500 hover:text-main font-bold py-2 px-4 rounded-full"
         @click="modalOpen = true"
@@ -24,6 +24,7 @@
 import WineCard from '../components/WineCard'
 import WineModal from '../components/WineModal'
 import WineForm from '../components/WineForm'
+import allWinesQuery from '../graphql/allWines.query.gql'
 export default {
   components: {
     WineCard,
@@ -33,8 +34,19 @@ export default {
   data() {
     return {
       // This array should be populated with data fetched from the API
-      allWines: [],
+      wines: [],
       modalOpen: false
+    }
+  },
+  apollo: {
+    wines: {
+      query: allWinesQuery,
+      update(data) {
+        return data.allWines
+      },
+      error(error) {
+        console.log(error)
+      }
     }
   },
   methods: {
