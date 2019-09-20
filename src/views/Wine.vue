@@ -16,6 +16,7 @@
       </p>
       <button
         type="button"
+        @click="deleteWine"
         class="modal-close px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white self-end mr-6"
       >
         Delete
@@ -26,6 +27,8 @@
 
 <script>
 import getWineQuery from '../graphql/getWine.query.gql'
+import allWinesQuery from '../graphql/allWines.query.gql'
+import deleteWineMutation from '../graphql/deleteWine.mutation.gql'
 export default {
   data() {
     return {
@@ -43,6 +46,23 @@ export default {
       update(data) {
         return data.getWine
       }
+    }
+  },
+  methods: {
+    deleteWine() {
+      this.$apollo
+        .mutate({
+          mutation: deleteWineMutation,
+          variables: { id: this.wine.id },
+          update: store => {
+            const data = store.readQuery({ query: allWinesQuery })
+            data.allWines = data.allWines.filter(
+              wine => wine.id !== this.wine.id
+            )
+            store.writeQuery({ query: allWinesQuery, data })
+          }
+        })
+        .finally(() => this.$router.push('/'))
     }
   }
 }
