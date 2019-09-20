@@ -1,8 +1,8 @@
 <template>
   <div>
     <ApolloQuery :query="require('../graphql/allWines.query.gql')">
-      <template v-slot="{ result: { loading, error, data } }">
-        <h2 class="text-xl text-bold m-3" v-if="loading">
+      <template v-slot="{ result: { error, data }, isLoading }">
+        <h2 class="text-xl text-bold m-3" v-if="isLoading">
           Loading...
         </h2>
         <h2 class="text-xl text-bold m-3" v-else-if="error">
