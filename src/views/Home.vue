@@ -57,7 +57,12 @@ export default {
       this.$apollo
         .mutate({
           mutation: addWineMutation,
-          variables: { wine }
+          variables: { wine },
+          update: (store, { data: { addWine } }) => {
+            const data = store.readQuery({ query: allWinesQuery })
+            data.allWines.push(addWine)
+            store.writeQuery({ query: allWinesQuery, data })
+          }
         })
         .finally(() => this.closeModal())
     }
