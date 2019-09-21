@@ -23,12 +23,23 @@
           <p class="mb-3 text-grey-darker text-base">
             {{ data.getWine.description }}
           </p>
-          <button
-            type="button"
-            class="modal-close px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white self-end mr-6"
+          <ApolloMutation
+            :mutation="require('../graphql/deleteWine.mutation.gql')"
+            :variables="{ id: data.getWine.id }"
+            :update="updateCache"
+            class="self-end"
+            @done="$router.push('/')"
           >
-            Delete
-          </button>
+            <template v-slot="{ mutate, loading, error }">
+              <button
+                type="button"
+                class="modal-close px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white mr-6"
+                @click="mutate()"
+              >
+                Delete
+              </button>
+            </template>
+          </ApolloMutation>
         </div>
       </template>
     </ApolloQuery>
@@ -36,10 +47,20 @@
 </template>
 
 <script>
+import allWinesQuery from '../graphql/allWines.query.gql'
 export default {
   data() {
     return {
       wine: {}
+    }
+  },
+  methods: {
+    updateCache(store) {
+      const data = store.readQuery({ query: allWinesQuery })
+      data.allWines = data.allWines.filter(
+        wine => wine.id !== this.$route.params.id
+      )
+      store.writeQuery({ query: allWinesQuery, data })
     }
   }
 }
