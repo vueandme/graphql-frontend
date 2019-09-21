@@ -50,8 +50,13 @@ export default {
     }
   },
   methods: {
-    closeModal(e) {
-      if (!e || e.type === 'click' || e.keyCode === 27) this.modalOpen = false
+    checkButton(e) {
+      if (e.keyCode === 27) {
+        this.closeModal()
+      }
+    },
+    closeModal() {
+      this.modalOpen = false
     },
     addNewWine(wine) {
       this.$apollo
@@ -68,10 +73,10 @@ export default {
     }
   },
   mounted() {
-    document.addEventListener('keyup', this.closeModal)
+    document.addEventListener('keyup', this.checkButton)
   },
   beforeDestroy() {
-    document.removeEventListener('keyup', this.closeModal)
+    document.removeEventListener('keyup', this.checkButton)
   }
 }
 </script>
