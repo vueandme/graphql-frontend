@@ -1,0 +1,7 @@
+#import './wineShort.fragment.gql'
+
+mutation AddWine($wine: WineInput!) {
+  addWine(wine: $wine) {
+    ...WineShort
+  }
+}

@@ -1,0 +1,3 @@
+mutation DeleteWine($id: ID!) {
+  deleteWine(id: $id)
+}

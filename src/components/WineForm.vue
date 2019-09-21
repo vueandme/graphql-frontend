@@ -48,7 +48,7 @@ export default {
     getFormValues(event) {
       const formData = {
         title: event.target.elements.title.value,
-        year: event.target.elements.year.value
+        year: Number(event.target.elements.year.value)
       }
 
       this.$emit('submit', formData)

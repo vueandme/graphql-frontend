@@ -1,0 +1,6 @@
+fragment WineShort on Wine {
+  id
+  title
+  year
+  variety
+}

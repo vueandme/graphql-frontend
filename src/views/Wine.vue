@@ -2,6 +2,7 @@
   <div class="w-full flex mt-8 border border-grey-light rounded">
     <img src="../assets/wine.png" alt="Wine" class="wine-placeholder m-6" />
     <ApolloQuery
+      class="w-full"
       :query="require('../graphql/getWine.query.gql')"
       :variables="{ id: $route.params.id }"
     >

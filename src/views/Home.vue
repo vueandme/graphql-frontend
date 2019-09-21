@@ -21,7 +21,18 @@
     </button>
     <WineModal v-if="modalOpen" @close="closeModal">
       <template #form>
-        <WineForm @submit="addNewWine" @cancel="closeModal" />
+        <ApolloMutation
+          :mutation="require('../graphql/addWine.mutation.gql')"
+          :update="updateCache"
+          @done="closeModal"
+        >
+          <template v-slot="{ mutate, loading, error }">
+            <WineForm
+              @submit="mutate({ variables: { wine: $event } })"
+              @cancel="closeModal"
+            />
+          </template>
+        </ApolloMutation>
       </template>
     </WineModal>
   </div>
@@ -31,6 +42,7 @@
 import WineCard from '../components/WineCard'
 import WineModal from '../components/WineModal'
 import WineForm from '../components/WineForm'
+import allWinesQuery from '../graphql/allWines.query.gql'
 export default {
   components: {
     WineCard,
@@ -52,10 +64,15 @@ export default {
     closeModal() {
       this.modalOpen = false
     },
-    addNewWine(wine) {
-      // The mutation logic for adding new wine should be written here
-      console.log(wine)
-      this.closeModal()
+    updateCache(
+      store,
+      {
+        data: { addWine }
+      }
+    ) {
+      const data = store.readQuery({ query: allWinesQuery })
+      data.allWines.push(addWine)
+      store.writeQuery({ query: allWinesQuery, data })
     }
   },
   mounted() {
