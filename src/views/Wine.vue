@@ -14,13 +14,22 @@
       <p class="mb-3 text-grey-darker text-base">
         {{ wine.description }}
       </p>
-      <button
-        type="button"
-        @click="deleteWine"
-        class="modal-close px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white self-end mr-6"
-      >
-        Delete
-      </button>
+      <div class="flex w-full justify-end">
+        <button
+          type="button"
+          @click="deleteWine"
+          class="modal-close px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white self-end mr-6"
+        >
+          Delete
+        </button>
+        <button
+          type="button"
+          @click="toggleFavorites"
+          class="px-4 hover:bg-main bg-secondary py-3 rounded-lg text-white mr-6"
+        >
+          Toggle favorites
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +38,7 @@
 import getWineQuery from '../graphql/getWine.query.gql'
 import allWinesQuery from '../graphql/allWines.query.gql'
 import deleteWineMutation from '../graphql/deleteWine.mutation.gql'
+import toggleFavoritesMutation from '../graphql/toggleFavorites.mutation.gql'
 export default {
   data() {
     return {
@@ -63,6 +73,13 @@ export default {
           }
         })
         .finally(() => this.$router.push('/'))
+    },
+    toggleFavorites() {
+      this.$apollo.mutate({
+        mutation: toggleFavoritesMutation,
+        variables: { id: this.wine.id },
+        refetchQueries: [{ query: allWinesQuery }]
+      })
     }
   }
 }

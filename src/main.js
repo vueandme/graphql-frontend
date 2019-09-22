@@ -11,6 +11,8 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@/assets/tailwind.css'
 import App from './App.vue'
 import router from './router'
+import typeDefs from './graphql/localSchema.gql'
+import { resolvers } from './graphql/resolvers'
 
 Vue.use(VueRouter)
 Vue.use(VueApollo)
@@ -38,9 +40,19 @@ const link = split(
   httpLink
 )
 
+const cache = new InMemoryCache()
+
 const defaultClient = new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache,
+  typeDefs,
+  resolvers
+})
+
+cache.writeData({
+  data: {
+    favoriteWines: ['9X9d6n2r7']
+  }
 })
 
 const apolloProvider = new VueApollo({

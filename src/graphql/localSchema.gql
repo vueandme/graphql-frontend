@@ -1,0 +1,11 @@
+extend type Query {
+  favoriteWines: [ID!]!
+}
+
+extend type Wine {
+  isInFavorites: Boolean
+}
+
+extend type Mutation {
+  addOrRemoveFromFavorites(id: ID!): [ID]
+}

@@ -1,0 +1,3 @@
+mutation ToggleFavorites($id: ID!) {
+  addOrRemoveFromFavorites(id: $id) @client
+}

@@ -4,6 +4,7 @@
       tag="div"
       :to="{ name: 'wine', params: { id: wine.id } }"
       class="cursor-pointer rounded overflow-hidden shadow-lg px-6 py-4"
+      :class="{ 'bg-main-lighter': wine.isInFavorites }"
     >
       <h3 class="font-bold text-lg mb-2">
         {{ wine.title }}

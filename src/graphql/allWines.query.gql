@@ -3,5 +3,6 @@
 query AllWines {
   allWines {
     ...WineShort
+    isInFavorites @client
   }
 }
