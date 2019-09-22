@@ -1,0 +1,7 @@
+#import './wineShort.fragment.gql'
+
+subscription WineSub {
+  wineSub {
+    ...WineShort
+  }
+}

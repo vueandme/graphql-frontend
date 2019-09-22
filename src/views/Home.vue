@@ -26,6 +26,7 @@ import WineModal from '../components/WineModal'
 import WineForm from '../components/WineForm'
 import allWinesQuery from '../graphql/allWines.query.gql'
 import addWineMutation from '../graphql/addWine.mutation.gql'
+import wineSubscription from '../graphql/wineSub.subscription.gql'
 export default {
   components: {
     WineCard,
@@ -43,6 +44,20 @@ export default {
       query: allWinesQuery,
       update(data) {
         return data.allWines
+      },
+      subscribeToMore: {
+        document: wineSubscription,
+        updateQuery: (
+          previous,
+          {
+            subscriptionData: {
+              data: { wineSub }
+            }
+          }
+        ) => {
+          previous.allWines.push(wineSub)
+          return previous
+        }
       },
       error(error) {
         console.log(error)
