@@ -5,13 +5,13 @@
     </h2>
     <div v-else-if="wines.length" class="flex flex-wrap">
       <WineCard v-for="wine in wines" :key="wine.id" :wine="wine" />
-      <button
-        class="modal-open bg-transparent border border-gray-500 hover:border-main text-gray-500 hover:text-main font-bold py-2 px-4 rounded-full"
-        @click="modalOpen = true"
-      >
-        Add a new wine
-      </button>
     </div>
+    <button
+      class="modal-open bg-transparent border border-gray-500 hover:border-main text-gray-500 hover:text-main font-bold py-2 px-4 rounded-full"
+      @click="modalOpen = true"
+    >
+      Add a new wine
+    </button>
     <WineModal v-if="modalOpen" @close="closeModal">
       <template #form>
         <WineForm @submit="addNewWine" @cancel="closeModal" />
