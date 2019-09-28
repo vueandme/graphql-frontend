@@ -38,9 +38,11 @@ const link = split(
   httpLink
 )
 
+const cache = new InMemoryCache()
+
 const defaultClient = new ApolloClient({
   link,
-  cache: new InMemoryCache()
+  cache
 })
 
 const apolloProvider = new VueApollo({
