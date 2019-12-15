@@ -1,9 +1,9 @@
 <template>
   <div>
-    <h2 class="text-xl text-bold m-3" v-if="$apollo.queries.wines.loading">
+    <h2 class="text-xl text-bold m-3" v-if="loading">
       Loading...
     </h2>
-    <div v-else-if="wines.length" class="flex flex-wrap">
+    <div v-else class="flex flex-wrap">
       <WineCard v-for="wine in wines" :key="wine.id" :wine="wine" />
     </div>
     <button
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { ref } from '@vue/composition-api'
+import { useQuery, useResult, useMutation } from '@vue/apollo-composable'
 import WineCard from '../components/WineCard'
 import WineModal from '../components/WineModal'
 import WineForm from '../components/WineForm'
@@ -28,41 +30,33 @@ import allWinesQuery from '../graphql/allWines.query.gql'
 import addWineMutation from '../graphql/addWine.mutation.gql'
 import wineSubscription from '../graphql/wineSub.subscription.gql'
 export default {
+  setup() {
+    const modalOpen = ref(false)
+    const { result, loading } = useQuery(allWinesQuery)
+    const wines = useResult(result, null, data => data.allWines)
+
+    const { mutate, onDone } = useMutation(addWineMutation, () => ({
+      update: (store, { data: { addWine } }) => {
+        const data = store.readQuery({ query: allWinesQuery })
+        data.allWines.push(addWine)
+        store.writeQuery({ query: allWinesQuery, data })
+      }
+    }))
+
+    const addNewWine = wine => {
+      mutate({ wine })
+    }
+
+    onDone(() => {
+      modalOpen.value = false
+    })
+
+    return { result, wines, loading, addNewWine, modalOpen }
+  },
   components: {
     WineCard,
     WineModal,
     WineForm
-  },
-  data() {
-    return {
-      wines: [],
-      modalOpen: false
-    }
-  },
-  apollo: {
-    wines: {
-      query: allWinesQuery,
-      update(data) {
-        return data.allWines
-      },
-      subscribeToMore: {
-        document: wineSubscription,
-        updateQuery: (
-          previous,
-          {
-            subscriptionData: {
-              data: { wineSub }
-            }
-          }
-        ) => {
-          previous.allWines.push(wineSub)
-          return previous
-        }
-      },
-      error(error) {
-        console.log(error)
-      }
-    }
   },
   methods: {
     checkButton(e) {
@@ -72,19 +66,6 @@ export default {
     },
     closeModal() {
       this.modalOpen = false
-    },
-    addNewWine(wine) {
-      this.$apollo
-        .mutate({
-          mutation: addWineMutation,
-          variables: { wine },
-          update: (store, { data: { addWine } }) => {
-            const data = store.readQuery({ query: allWinesQuery })
-            data.allWines.push(addWine)
-            store.writeQuery({ query: allWinesQuery, data })
-          }
-        })
-        .finally(() => this.closeModal())
     }
   },
   mounted() {

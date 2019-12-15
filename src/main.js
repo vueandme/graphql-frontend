@@ -1,12 +1,14 @@
 import Vue from 'vue'
-import VueApollo from 'vue-apollo'
 import VueRouter from 'vue-router'
+import VueCompositionApi from '@vue/composition-api'
 import { ApolloClient } from 'apollo-client'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { split } from 'apollo-link'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
+import { provide } from '@vue/composition-api'
+import { DefaultApolloClient } from '@vue/apollo-composable'
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@/assets/tailwind.css'
 import App from './App.vue'
@@ -15,7 +17,7 @@ import typeDefs from './graphql/localSchema.gql'
 import { resolvers } from './graphql/resolvers'
 
 Vue.use(VueRouter)
-Vue.use(VueApollo)
+Vue.use(VueCompositionApi)
 
 const httpLink = new HttpLink({
   uri: 'http://localhost:4000/graphql'
@@ -55,14 +57,12 @@ cache.writeData({
   }
 })
 
-const apolloProvider = new VueApollo({
-  defaultClient
-})
-
 Vue.config.productionTip = false
 
 new Vue({
+  setup() {
+    provide(DefaultApolloClient, defaultClient)
+  },
   render: h => h(App),
-  apolloProvider,
   router
 }).$mount('#app')
